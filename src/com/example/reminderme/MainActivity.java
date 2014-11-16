@@ -37,6 +37,11 @@ public class MainActivity extends ActionBarActivity {
                 Toast.makeText(getApplicationContext(),
                         "Sorry! unable to create maps", Toast.LENGTH_SHORT)
                         .show();
+                
+                
+                
+                
+                
             }
         }
     	
