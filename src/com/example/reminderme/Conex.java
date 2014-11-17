@@ -1,36 +1,49 @@
 package com.example.reminderme;
 
-import java.io.DataInputStream;
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Conex {
-	
-	final String HOST = "localhost";
 	final int PUERTO=5000;
-	Socket sc;
-	DataOutputStream mensaje;
-	DataInputStream entrada;
+	ServerSocket sc;
+	Socket so;
+	DataOutputStream salida;
+	String mensajeRecibido;
 
-	public void initClient() /*ejecuta este metodo para correr el cliente */
+
+	public void initServer()
 
 	{
+	BufferedReader entrada;
 	try
+		{
+		sc = new ServerSocket(PUERTO );/* crea socket servidor que escuchara en puerto 5000*/
+		so=new Socket();
+		System.out.println("Esperando una conexión:");
+		so = sc.accept();
+		System.out.println("Un cliente se ha conectado.");
+		//Canales de entrada y salida de datos
+		entrada = new BufferedReader(new InputStreamReader(so.getInputStream()));
+		salida = new DataOutputStream(so.getOutputStream());
+		System.out.println("Confirmando conexion al cliente....");
+		salida.writeUTF("Conexión exitosa...n envia un mensaje ");
+		//Recepcion de mensaje
+		mensajeRecibido = entrada.readLine();
+		System.out.println(mensajeRecibido);
+		salida.writeUTF("Se recibio tu mensaje.n Terminando conexion...");
+		salida.writeUTF("Gracias por conectarte, adios!");
+		System.out.println("Cerrando conexión...");
+		sc.close();}//Aqui se cierra la conexión con el cliente
+		catch(Exception e )
+		{
 
-	{
-	sc = new Socket( HOST , PUERTO ); /*conectar a un servidor en localhost con puerto 5000*/
-	//creamos el flujo de datos por el que se enviara un mensaje
-	mensaje = new DataOutputStream(sc.getOutputStream());
-	//enviamos el mensaje
-	mensaje.writeUTF("hola que tal!!");
-	//cerramos la conexión
-	sc.close();
-	}catch(Exception e )
-	{
-	System.out.println("Error: "+e.getMessage());
+		System.out.println("Error: "+e.getMessage());
+	
+		}
 
-	}
-
-	}
+		}
 
 }
